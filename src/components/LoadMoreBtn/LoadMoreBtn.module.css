@@ -1,0 +1,48 @@
+.btn_wrap {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+  margin-top: 20px;
+  margin-bottom: 20px;
+  border-radius: 8px;
+}
+
+.btn {
+  display: flex;
+  align-items: center;
+  column-gap: 10px;
+  height: 40px;
+  padding: 0 10px;
+  border: 1px solid transparent;
+  border-radius: 8px;
+  background-color: #ffc864;
+
+  color: #111111;
+  font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande',
+    'Lucida Sans', Arial, sans-serif;
+  font-size: 18px;
+  font-weight: 500;
+  letter-spacing: 0.08em;
+
+  transition: transform 250ms linear, background-color 250ms linear;
+
+  &:hover,
+  &:focus {
+    outline: transparent;
+    background-color: #b58122;
+    transform: scale(1.05);
+  }
+}
+
+.ico {
+  width: 20px;
+  height: 20px;
+  transition: color 250ms linear;
+
+  color: #111111;
+}
+
+/* .btn:hover .ico,
+.btn:focus .ico {
+  color: #ffc864;
+} */
