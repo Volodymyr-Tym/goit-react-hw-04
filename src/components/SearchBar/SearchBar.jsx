@@ -1,13 +1,26 @@
 import { ImSearch } from 'react-icons/im';
 
 import styles from './SearchBar.module.css';
+import toast from 'react-hot-toast';
 
-const SearchBar = ({ onSubmit, message }) => {
+const SearchBar = ({ onSubmit }) => {
+  const emptyFieldMessage = () =>
+    toast('Searching field is empty', {
+      duration: 4000,
+      icon: '🤷‍♂️',
+      style: {
+        border: '1px solid #713200',
+        padding: '8px',
+        fontWeight: '500',
+        backgroundColor: '#f66060',
+      },
+    });
+
   const handleSubmit = event => {
     const inputValue = event.target.searchInput.value;
     event.preventDefault();
 
-    if (inputValue === '') return message();
+    if (inputValue === '') return emptyFieldMessage();
 
     onSubmit(inputValue);
 

@@ -7,20 +7,9 @@ import SearchBar from './components/SearchBar/SearchBar';
 import ImageGallery from './components/ImageGallery/ImageGallery';
 import Loader from './components/Loader/Loader';
 import LoadMoreBtn from './components/LoadMoreBtn/LoadMoreBtn';
+import ImageModal from './components/ImageModal/ImageModal';
 
 import './App.css';
-
-const emptyFieldMessage = () =>
-  toast('Searching field is empty', {
-    duration: 4000,
-    icon: '🤷‍♂️',
-    style: {
-      border: '1px solid #713200',
-      padding: '8px',
-      fontWeight: '500',
-      backgroundColor: '#f66060',
-    },
-  });
 
 const errorMessage = err =>
   toast.error(
@@ -42,6 +31,8 @@ function App() {
   const [totalPages, setTotalPages] = useState(0);
   const [isLoading, setIsLoading] = useState(false);
   const [page, setPage] = useState(1);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [clickedImage, setClickedImage] = useState(null);
   // const testRef = useRef(null);
 
   const fetchImages = async (searchValue, page) => {
@@ -77,6 +68,21 @@ function App() {
     });
   };
 
+  // useEffect(() => {}, [clickedImage]);
+
+  const onImageClick = imageInfo => {
+    setClickedImage(imageInfo);
+    openModal();
+  };
+
+  const openModal = () => {
+    setIsModalOpen(true);
+  };
+
+  const closeModal = () => {
+    setIsModalOpen(false);
+  };
+
   // const scrollTest = () => {
   //   if (testRef !== null) {
   //     testRef.current.scrollIntoView({
@@ -95,21 +101,30 @@ function App() {
 
   return (
     <>
-      <SearchBar onSubmit={onSearch} message={emptyFieldMessage} />
+      <SearchBar onSubmit={onSearch} />
 
       <Toaster />
 
       {/* <button onClick={scrollTest} type="button">
         Srcoll
       </button> */}
+      {/* <button type="button" onClick={openModal}>
+        open
+      </button> */}
 
       <Section>
         {fetchedImages !== null && (
-          <ImageGallery images={fetchedImages}></ImageGallery>
+          <ImageGallery images={fetchedImages} onImageClick={onImageClick} />
         )}
         {totalPages > 1 && totalPages !== page && (
           <LoadMoreBtn onLoadMoreClick={onLoadMoreClick} />
         )}
+
+        <ImageModal
+          isOpen={isModalOpen}
+          onCloseModalClick={closeModal}
+          imageInfo={clickedImage}
+        />
 
         {isLoading && <Loader />}
       </Section>

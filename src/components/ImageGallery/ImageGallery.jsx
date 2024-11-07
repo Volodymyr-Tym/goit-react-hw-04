@@ -1,15 +1,15 @@
 import ImageCard from '../ImageCard/ImageCard';
 import styles from './ImageGallery.module.css';
 
-const ImageGallery = ({ images }) => {
+const ImageGallery = ({ images, onImageClick }) => {
   return (
     <div>
       <ul className={styles.list}>
-        {images.length !== 0 &&
+        {Array.isArray(images) &&
           images.map(image => {
             return (
               <li className={styles.list_item} key={image.id}>
-                <ImageCard image={image} />
+                <ImageCard image={image} onImageClick={onImageClick} />
               </li>
             );
           })}
