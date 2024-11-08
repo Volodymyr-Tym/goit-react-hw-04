@@ -11,6 +11,21 @@ import ImageModal from './components/ImageModal/ImageModal';
 
 import './App.css';
 
+const findNothing = queryText => {
+  toast.error(
+    `Nothing was found for your request:
+    "${queryText}"`,
+    {
+      style: {
+        border: '1px solid #ad0000',
+        padding: '8px',
+        fontWeight: '500',
+        backgroundColor: '#edc939',
+      },
+    }
+  );
+};
+
 const errorMessage = err =>
   toast.error(
     `Ooops, something get wrong...
@@ -41,12 +56,15 @@ function App() {
 
       const data = await fetchImagesBySearchValue(searchValue, page);
 
+      if (data.total_pages === 0) {
+        return findNothing(searchValue);
+      }
       setTotalPages(data.total_pages);
 
       if (page > 1) {
         setFetchedImages(prevImages => {
-          console.log('...prevImages', ...prevImages);
-          console.log('data.results', data.results);
+          // console.log('...prevImages', ...prevImages);
+          // console.log('data.results', data.results);
           return [...prevImages, ...data.results];
         });
       } else setFetchedImages(data.results);
