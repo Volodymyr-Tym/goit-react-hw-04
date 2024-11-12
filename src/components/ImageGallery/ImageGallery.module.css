@@ -1,10 +1,33 @@
 .list {
   display: flex;
-  flex-wrap: wrap;
+  flex-direction: column;
   gap: 20px;
 }
 
 .list_item {
-  width: calc((100% - 80px) / 5);
-  height: 350px;
+  width: 100%;
+  min-height: 350px;
+}
+
+@media screen and (min-width: 425px) {
+  .list {
+    flex-direction: row;
+    flex-wrap: wrap;
+  }
+
+  .list_item {
+    width: calc((100% - 20px) / 2);
+  }
+}
+
+@media screen and (min-width: 768px) {
+  .list_item {
+    width: calc((100% - 40px) / 3);
+  }
+}
+
+@media screen and (min-width: 1440px) {
+  .list_item {
+    width: calc((100% - 80px) / 5);
+  }
 }

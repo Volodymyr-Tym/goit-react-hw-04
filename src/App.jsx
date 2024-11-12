@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
-import toast, { Toaster } from 'react-hot-toast';
+import { Toaster } from 'react-hot-toast';
 import { fetchImagesBySearchValue } from './api/gallery';
+import { errorMessage, noMatches } from './messages/toastMessages';
 
 import Section from './components/Section/Section';
 import SearchBar from './components/SearchBar/SearchBar';
@@ -11,35 +12,6 @@ import ImageModal from './components/ImageModal/ImageModal';
 
 import './App.css';
 
-const findNothing = queryText => {
-  toast.error(
-    `Nothing was found for your request:
-    "${queryText}"`,
-    {
-      style: {
-        border: '1px solid #ad0000',
-        padding: '8px',
-        fontWeight: '500',
-        backgroundColor: '#edc939',
-      },
-    }
-  );
-};
-
-const errorMessage = err =>
-  toast.error(
-    `Ooops, something get wrong...
-     "${err}"`,
-    {
-      style: {
-        border: '1px solid #ad0000',
-        padding: '8px',
-        fontWeight: '500',
-        backgroundColor: '#ff0000',
-      },
-    }
-  );
-
 function App() {
   const [searchValue, setSearchValue] = useState(null);
   const [fetchedImages, setFetchedImages] = useState(null);
@@ -48,7 +20,6 @@ function App() {
   const [page, setPage] = useState(1);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [clickedImage, setClickedImage] = useState(null);
-  // const testRef = useRef(null);
 
   const fetchImages = async (searchValue, page) => {
     try {
@@ -57,14 +28,12 @@ function App() {
       const data = await fetchImagesBySearchValue(searchValue, page);
 
       if (data.total_pages === 0) {
-        return findNothing(searchValue);
+        return noMatches(searchValue);
       }
       setTotalPages(data.total_pages);
 
       if (page > 1) {
         setFetchedImages(prevImages => {
-          // console.log('...prevImages', ...prevImages);
-          // console.log('data.results', data.results);
           return [...prevImages, ...data.results];
         });
       } else setFetchedImages(data.results);
@@ -86,8 +55,6 @@ function App() {
     });
   };
 
-  // useEffect(() => {}, [clickedImage]);
-
   const onImageClick = imageInfo => {
     setClickedImage(imageInfo);
     openModal();
@@ -101,16 +68,6 @@ function App() {
     setIsModalOpen(false);
   };
 
-  // const scrollTest = () => {
-  //   if (testRef !== null) {
-  //     testRef.current.scrollIntoView({
-  //       behavior: 'smooth',
-  //       block: 'end',
-  //       inline: 'nearest',
-  //     });
-  //   }
-  // };
-
   useEffect(() => {
     if (searchValue === null) return;
 
@@ -122,13 +79,6 @@ function App() {
       <SearchBar onSubmit={onSearch} />
 
       <Toaster />
-
-      {/* <button onClick={scrollTest} type="button">
-        Srcoll
-      </button> */}
-      {/* <button type="button" onClick={openModal}>
-        open
-      </button> */}
 
       <Section>
         {fetchedImages !== null && (
@@ -146,7 +96,6 @@ function App() {
 
         {isLoading && <Loader />}
       </Section>
-      {/* <p ref={testRef}>Test ref</p> */}
     </>
   );
 }
