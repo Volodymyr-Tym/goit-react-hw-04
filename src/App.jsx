@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { Toaster } from 'react-hot-toast';
 import { fetchImagesBySearchValue } from './api/gallery';
-import { errorMessage, noMatches } from './messages/toastMessages';
+import { noMatches } from './messages/toastMessages';
 
 import Section from './components/Section/Section';
 import SearchBar from './components/SearchBar/SearchBar';
@@ -11,12 +11,14 @@ import LoadMoreBtn from './components/LoadMoreBtn/LoadMoreBtn';
 import ImageModal from './components/ImageModal/ImageModal';
 
 import './App.css';
+import ErrorMessage from './components/ErrorMessage/ErrorMessage';
 
 function App() {
   const [searchValue, setSearchValue] = useState(null);
   const [fetchedImages, setFetchedImages] = useState(null);
   const [totalPages, setTotalPages] = useState(0);
   const [isLoading, setIsLoading] = useState(false);
+  const [isError, setIsError] = useState(null);
   const [page, setPage] = useState(1);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [clickedImage, setClickedImage] = useState(null);
@@ -37,8 +39,11 @@ function App() {
           return [...prevImages, ...data.results];
         });
       } else setFetchedImages(data.results);
+      isError !== null ? setIsError(null) : isError;
     } catch (error) {
-      errorMessage(error.message);
+      setIsError(error.message);
+      fetchImages !== null ? setFetchedImages(null) : fetchImages;
+      totalPages !== 0 ? setTotalPages(0) : totalPages;
     } finally {
       setIsLoading(false);
     }
@@ -81,6 +86,7 @@ function App() {
       <Toaster />
 
       <Section>
+        {isError !== null && <ErrorMessage error={isError} />}
         {fetchedImages !== null && (
           <ImageGallery images={fetchedImages} onImageClick={onImageClick} />
         )}

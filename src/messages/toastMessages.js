@@ -26,17 +26,3 @@ export const noMatches = queryText => {
     }
   );
 };
-
-export const errorMessage = err =>
-  toast.error(
-    `Ooops, something get wrong...
-       "${err}"`,
-    {
-      style: {
-        border: '1px solid #ad0000',
-        padding: '8px',
-        fontWeight: '500',
-        backgroundColor: '#ff0000',
-      },
-    }
-  );
